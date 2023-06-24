@@ -17,10 +17,8 @@ app.get('/musicians', async (req, res, next) => {
     // Parse the query params, set default values, and create appropriate
     // offset and limit values if necessary.
     // Your code here
-    const size = parseInt(req.query.size) 
-    const page = parseInt(req.query.page)
-    const limit = (size === 0 || page === 0) ? null : size ? size : 5
-    const offset = (size === 0 || page === 0) ? null : page ? size*(page-1) : 0
+    const [limit, offset] = getPagination(req, 5) 
+
     
     // Query for all musicians
     // Include attributes for `id`, `firstName`, and `lastName`
@@ -49,6 +47,8 @@ app.get('/bands', async (req, res, next) => {
     // Parse the query params, set default values, and create appropriate
     // offset and limit values if necessary.
     // Your code here
+    const [limit, offset] = getPagination(req, 6) 
+
     
     // Query for all bands
     // Include attributes for `id` and `name`
@@ -64,6 +64,8 @@ app.get('/bands', async (req, res, next) => {
         // add limit key-value to query
         // add offset key-value to query
         // Your code here
+        limit: limit,
+        offset: offset
     });
 
     res.json(bands)
@@ -75,6 +77,9 @@ app.get('/instruments', async (req, res, next) => {
     // Parse the query params, set default values, and create appropriate
     // offset and limit values if necessary.
     // Your code here
+
+    const [limit, offset] = getPagination(req, 3) 
+
     
     // Query for all instruments
     // Include attributes for `id` and `type`
@@ -98,6 +103,8 @@ app.get('/instruments', async (req, res, next) => {
         // add limit key-value to query
         // add offset key-value to query
         // Your code here
+        limit: limit,
+        offset: offset
     });
 
     res.json(instruments)
@@ -105,6 +112,16 @@ app.get('/instruments', async (req, res, next) => {
 
 // ADVANCED BONUS: Reduce Pagination Repetition
 // Your code here
+
+function getPagination(req, defaultLimit){
+    const size = parseInt(req.query.size) 
+    const page = parseInt(req.query.page)
+    const limit = (size === 0 || page === 0) ? null : size ? size : defaultLimit
+    const offset = (size === 0 || page === 0) ? null : page ? size*(page-1) : 0
+
+
+    return [limit, offset]
+}
 
 
 // Root route - DO NOT MODIFY
